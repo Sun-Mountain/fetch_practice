@@ -10,7 +10,8 @@ const retrieve = async function (options) {
 
     var uri = new URI({
         protocol: "http",
-        hostname: "localhost:3000/records"
+        hostname: "localhost:3000",
+        path: "/records"
     })
 
     try {
@@ -18,8 +19,6 @@ const retrieve = async function (options) {
         const jsonRecords = await records.json();
 
         let result = {}
-
-        console.log(jsonRecords);
 
         const offset = (options.page - 1) * 10;
         const items = jsonRecords.slice(offset, offset + 10);
