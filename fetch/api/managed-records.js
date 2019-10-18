@@ -11,7 +11,8 @@ const retrieve = async function (options) {
     var uri = new URI({
         protocol: "http",
         hostname: "localhost:3000",
-        path: "/records"
+        path: "/records",
+        query: "limit=999"
     })
 
     try {
@@ -37,33 +38,22 @@ const retrieve = async function (options) {
             }
         });
 
-        if (options.page - 1 === 0) {
+        if (options.page - 1 === 0 || options.page - 1 === NaN) {
             result.previousPage = null;
         } else {
             result.previousPage = options.page - 1;
         }
 
-        result.nextPage = options.page + 1;
+        if (options.page === 51) {
+            result.nextPage = null;
+        } else {
+            result.nextPage = options.page + 1;
+        }
+
         result.ids = items.map(item => item.id);
         result.open = items.filter(function (item) {
             return item.disposition === "open";
         });
-
-        // if (!options.colors) {
-        //     result.open = items.filter(function (item) {
-        //         return item.disposition === "open";
-        //     });
-        // } else {
-        //     const colors = options.colors;
-
-        //     result.open = items.filter(function (item) {
-        //         if (item.disposition === "open") {
-        //             colors.map(function (color) {
-        //                 return item.color === color;
-        //             })
-        //         }
-        //     });
-        // };
 
         result.closedPrimaryCount = primaryClosed.length;
 
