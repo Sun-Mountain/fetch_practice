@@ -504,14 +504,15 @@ var data = [
   { id: 500, color: "blue", disposition: "closed" }
 ];
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods','GET');
+  res.header('Access-Control-Allow-Methods', 'GET');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
 
 app.get('/records', function (req, res) {
+  console.log("print: " + req.originalUrl);
   var limit = parseInt(req.query.limit) || 100;
   var offset = parseInt(req.query.offset) || 0;
   var colorFilters = req.query.color;
@@ -528,8 +529,9 @@ app.get('/records', function (req, res) {
   }
 
   if (colorFilters && colorFilters.length) {
+    console.log(colorFilters);
     response = data
-      .filter(function(item){ return colorFilters.indexOf(item.color) !== -1; })
+      .filter(function (item) { return colorFilters.indexOf(item.color) !== -1; })
       .slice(offset, offset + limit);
   } else {
     response = data.slice(offset, offset + limit);
