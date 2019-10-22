@@ -529,7 +529,7 @@ app.get('/records', function (req, res) {
   }
 
   if (colorFilters && colorFilters.length) {
-    console.log(colorFilters);
+    // console.log(colorFilters);
     response = data
       .filter(function (item) { return colorFilters.indexOf(item.color) !== -1; })
       .slice(offset, offset + limit);

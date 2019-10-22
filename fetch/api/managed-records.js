@@ -7,27 +7,28 @@ window.path = "http://localhost:3000/records";
 // Your retrieve function plus any additional functions go here ...
 
 const retrieve = async function (options) {
-    const colors = options.colors;
+
+
+    const colors = (options && options.colors) ? options.colors : null;
     const limit = 10;
-    const page = options.page ? options.page : 1;
+    const page = (options && options.page) ? options.page : 1;
+    console.log("THEPAGE:", page);
     const offset = (page - 1) * 10;
 
-    var uri = new URI({
-        protocol: "http",
-        hostname: "localhost:3000",
-        path: "/records",
-        query: `limit=${limit}&offset=${offset}&`
-    })
+    var uri = new URI(window.path);
+
+    uri.search(`limit=${limit}&offset=${offset}`);
 
     if (colors) {
-        uri.setSearch("color", colors);
+        uri.setSearch("color[]", colors);
     }
 
     try {
+        // console.log("IN TRY BLOCK", uri);
         const records = await fetch(uri);
         const items = await records.json();
 
-        console.log(items);
+        console.log("ITEMS:", items);
 
         let result = {};
 
@@ -38,12 +39,6 @@ const retrieve = async function (options) {
                 item.isPrimary = false;
             }
         });
-
-        if (colors) {
-            items.filter(function (item) {
-                colors.indexOf(item.color);
-            })
-        }
 
         if (items.length === 0) {
             result.previousPage = null;
@@ -56,7 +51,7 @@ const retrieve = async function (options) {
             }
         });
 
-        if (page === 1 || page - 1 === NaN) {
+        if (page === 1 || page - 1 === NaN || !page) {
             result.previousPage = null;
         } else {
             result.previousPage = page - 1;
@@ -80,7 +75,7 @@ const retrieve = async function (options) {
 
         result.closedPrimaryCount = primaryClosed.length;
 
-        console.log("result:", result);
+        console.log("result:", JSON.stringify(result));
 
         // console.log("JSON RESULTS:", jsonRecords);
 
