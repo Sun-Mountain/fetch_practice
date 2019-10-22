@@ -12,7 +12,7 @@ const retrieve = async function (options) {
     const colors = (options && options.colors) ? options.colors : null;
     const limit = 10;
     const page = (options && options.page) ? options.page : 1;
-    console.log("THEPAGE:", page);
+    // console.log("THEPAGE:", page);
     const offset = (page - 1) * 10;
 
     var uri = new URI(window.path);
@@ -28,7 +28,7 @@ const retrieve = async function (options) {
         const records = await fetch(uri);
         const items = await records.json();
 
-        console.log("ITEMS:", items);
+        // console.log("ITEMS:", items);
 
         let result = {};
 
@@ -75,7 +75,7 @@ const retrieve = async function (options) {
 
         result.closedPrimaryCount = primaryClosed.length;
 
-        console.log("result:", JSON.stringify(result));
+        // console.log("result:", JSON.stringify(result));
 
         // console.log("JSON RESULTS:", jsonRecords);
 
